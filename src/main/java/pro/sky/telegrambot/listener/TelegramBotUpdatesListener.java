@@ -31,7 +31,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             logger.info("Processing update: {}", update);
             // Process your updates here
             if(update.message().text().equalsIgnoreCase("/start")) {
-                System.out.println("Welcome to BotEventNotificator!!!");
                 Long chatId = update.message().chat().id();
                 sendMessage(chatId,"Welcome to Event-Notificator Bot !!!");
             }
