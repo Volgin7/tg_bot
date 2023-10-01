@@ -20,7 +20,16 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="332d066c-bf41-4bcd-979d-204af8ea3dd9" object-ref="schemas/public/tables/notification_task" />
+    </open-files>
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="332d066c-bf41-4bcd-979d-204af8ea3dd9" dataset="public.notification_task" active-filter-id="">
+      <filter id="01f06b1c-bbed-4e8a-a10d-5031ea36f06e" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="id" operator="=" value="" active="true" />
+      </filter>
+    </filter-actions>
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />

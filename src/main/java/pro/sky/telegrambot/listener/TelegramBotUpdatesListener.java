@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.model.notification_task;
+import pro.sky.telegrambot.service.NotificationTaskService;
+
 import java.time.LocalDateTime;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +27,9 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     @Autowired
     private TelegramBot telegramBot;
 
+    @Autowired
+    private NotificationTaskService notificationTaskService;
+
     @PostConstruct
     public void init() {
         telegramBot.setUpdatesListener(this);
@@ -34,14 +39,23 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     public int process(List<Update> updates) {
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
-            // Process your updates here
-            if(update.message().text().equalsIgnoreCase("/start")) {
-                Long chatId = update.message().chat().id();
-                sendMessage(chatId,"Welcome to Event-Notificator Bot !!!");
-            } else {
-                notification_task  notificationTask = new notification_task();
-                notificationTask = ParseMessage(update);
-                System.out.println(notificationTask);
+            // Process updates
+            if (update.message().text() != null) {
+                if (update.message().text().equalsIgnoreCase("/start")) {
+                    sendMessage(update.message().chat().id(), "Welcome to Event-Notificator Bot !!!");
+                } else {
+                    notification_task notificationTask;
+                    notificationTask = ParseMessage(update);
+                    if (notificationTask != null) {
+                        System.out.println(notificationTask);
+                        notificationTaskService.createNotificationTask(notificationTask);
+
+                    } else {
+                        sendMessage(
+                                update.message().chat().id()
+                                , "Запись не соответсвует формату: dd.MM.yyyy HH:mm + task");
+                    }
+                }
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
@@ -66,12 +80,21 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         String task_str = null;
         if (matcher.matches()) {
             date_str = matcher.group(1);
-            task_str= matcher.group(3);
+            task_str = matcher.group(3);
         }
-        System.out.println("date_str = " + date_str);
-        System.out.println("task_str = " + task_str);
+        if (date_str == null || task_str == null) {
+            return null;
+        }
 
-        LocalDateTime date = LocalDateTime.parse(date_str, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+        LocalDateTime date;
+        try{
+            date = LocalDateTime.parse(
+                    date_str,
+                    DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+        } catch (Exception e) {
+            return null;
+        }
+
         notificationTask.setTime(date);
         notificationTask.setText(task_str);
 
