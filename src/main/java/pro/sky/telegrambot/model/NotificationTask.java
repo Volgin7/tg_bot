@@ -8,16 +8,16 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-public class notification_task {
+public class NotificationTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    LocalDateTime time;
+    private LocalDateTime time;
     private Long chatID;
-    String text;
+    private String text;
     boolean flag;
 
-    public notification_task() {
+    public NotificationTask() {
     }
 
     public Long getId() {
@@ -63,8 +63,8 @@ public class notification_task {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof notification_task)) return false;
-        notification_task that = (notification_task) o;
+        if (!(o instanceof NotificationTask)) return false;
+        NotificationTask that = (NotificationTask) o;
         return isFlag() == that.isFlag() && Objects.equals(getId(), that.getId()) && Objects.equals(getTime(), that.getTime()) && Objects.equals(getChatID(), that.getChatID()) && Objects.equals(getText(), that.getText());
     }
 
@@ -75,7 +75,7 @@ public class notification_task {
 
     @Override
     public String toString() {
-        return "notification_task{" +
+        return "NotificationTask{" +
                 "id=" + id +
                 ", time=" + time +
                 ", chatID=" + chatID +

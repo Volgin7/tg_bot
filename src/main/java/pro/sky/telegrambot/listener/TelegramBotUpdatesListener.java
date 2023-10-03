@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pro.sky.telegrambot.model.notification_task;
+import pro.sky.telegrambot.model.NotificationTask;
 import pro.sky.telegrambot.service.NotificationTaskService;
 
 import java.time.LocalDateTime;
@@ -44,7 +44,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 if (update.message().text().equalsIgnoreCase("/start")) {
                     sendMessage(update.message().chat().id(), "Welcome to Event-Notificator Bot !!!");
                 } else {
-                    notification_task notificationTask;
+                    NotificationTask notificationTask;
                     notificationTask = ParseMessage(update);
                     if (notificationTask != null) {
                         System.out.println(notificationTask);
@@ -66,8 +66,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         telegramBot.execute(message);
     } // end send message
 
-    public notification_task ParseMessage(Update update) {
-        notification_task notificationTask = new notification_task();
+    public NotificationTask ParseMessage(Update update) {
+        NotificationTask notificationTask = new NotificationTask();
 
         notificationTask.setChatID(update.message().chat().id());
 

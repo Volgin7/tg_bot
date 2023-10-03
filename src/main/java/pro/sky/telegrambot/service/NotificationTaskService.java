@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import pro.sky.telegrambot.model.notification_task;
-import pro.sky.telegrambot.repositories.notification_taskRepository;
+import pro.sky.telegrambot.model.NotificationTask;
+import pro.sky.telegrambot.repositories.NotificationTaskRepository;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -21,15 +21,15 @@ public class NotificationTaskService {
     private static final Logger logger = LoggerFactory.getLogger(NotificationTaskService.class);
 
     @Autowired
-    private notification_taskRepository notificationTaskRepository;
+    private NotificationTaskRepository notificationTaskRepository;
     @Autowired
     private TelegramBot telegramBot;
 
-    public NotificationTaskService (notification_taskRepository notificationTaskRepository) {
+    public NotificationTaskService (NotificationTaskRepository notificationTaskRepository) {
         this.notificationTaskRepository = notificationTaskRepository;
     }
 
-    public notification_task createNotificationTask(notification_task notificationTask) {
+    public NotificationTask createNotificationTask(NotificationTask notificationTask) {
         logger.info("Was invoked method for create notificationTask");
         System.out.println(notificationTask);
         return notificationTaskRepository.save(notificationTask);
@@ -38,12 +38,12 @@ public class NotificationTaskService {
     @Scheduled(cron = "0 0/1 * * * *")
     public void sendNotifications() {
         logger.info("Was invoked method for sending notificationTask");
-        List<notification_task> notificationsToSend = new ArrayList<>();
+        List<NotificationTask> notificationsToSend = new ArrayList<>();
         LocalDateTime time = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
         //System.out.println("time = " + time);
         notificationsToSend = notificationTaskRepository.getNotificationsToSent(time);
 
-        for (notification_task notification: notificationsToSend) {
+        for (NotificationTask notification: notificationsToSend) {
             System.out.println("НАПОМИНАНИЕ =  " + notification.getText());
             SendMessage message = new SendMessage(notification.getChatID()
                     ,"НАПОМИНАНИЕ =  " + notification.getText());
