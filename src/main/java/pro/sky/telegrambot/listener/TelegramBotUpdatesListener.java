@@ -76,27 +76,27 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
         Pattern pattern = Pattern.compile("([0-9\\.\\:\\s]{16})(\\s)([\\W+]+)");
         Matcher matcher = pattern.matcher(text);
-        String date_str = null;
-        String task_str = null;
+        String dateStr = null;
+        String taskStr = null;
         if (matcher.matches()) {
-            date_str = matcher.group(1);
-            task_str = matcher.group(3);
+            dateStr = matcher.group(1);
+            taskStr = matcher.group(3);
         }
-        if (date_str == null || task_str == null) {
+        if (dateStr == null || taskStr == null) {
             return null;
         }
 
         LocalDateTime date;
         try{
             date = LocalDateTime.parse(
-                    date_str,
+                    dateStr,
                     DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
         } catch (Exception e) {
             return null;
         }
 
         notificationTask.setTime(date);
-        notificationTask.setText(task_str);
+        notificationTask.setText(taskStr);
 
         return notificationTask;
     }
